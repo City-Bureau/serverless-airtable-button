@@ -1,0 +1,39 @@
+{
+  "name": "serverless-airtable-button",
+  "private": true,
+  "description": "Create links that create Airtable records on click",
+  "version": "0.1.0",
+  "author": "City Bureau",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "serverless-dotenv-plugin": "^2.3.2",
+    "serverless-plugin-aws-alerts": "^1.4.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "eslint": "^6.8.0",
+    "eslint-config-react-app": "^5.2.1",
+    "husky": "^4.2.3",
+    "prettier": "^1.19.1"
+  },
+  "license": "MIT",
+  "eslintConfig": {
+    "extends": "react-app",
+    "ignorePatterns": [
+      "node_modules/"
+    ]
+  },
+  "prettier": {
+    "endOfLine": "lf",
+    "semi": false,
+    "singleQuote": false,
+    "tabWidth": 2,
+    "trailingComma": "es5"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -x @commitlint/config-conventional"
+    }
+  }
+}

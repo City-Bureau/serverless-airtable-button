@@ -1,0 +1,47 @@
+service: airtable-button
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: us-east-2
+  environment:
+    AIRTABLE_KEY: ${env:AIRTABLE_KEY}
+    AIRTABLE_BASE: ${env:AIRTABLE_BASE}
+    AIRTABLE_TABLE: ${env:AIRTABLE_TABLE}
+    SNS_EMAIL: ${env:SNS_EMAIL}
+  tags:
+    project: airtable-button-prod
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-aws-alerts
+
+custom:
+  alerts:
+    stages:
+      - prod
+    alarms:
+      - functionErrors
+    topics:
+      alarm:
+        topic: ${self:service}-${self:provider.stage}-alerts-alarm
+        notifications:
+          - protocol: email
+            endpoint: ${env:SNS_EMAIL}
+
+functions:
+  handle:
+    handler: handler.handler
+    timeout: 30
+    alarms:
+      - functionErrors
+    events:
+      - http:
+          path: api
+          method: get
+          cors: true
+      - http:
+          path: api
+          method: post
+          cors: true
