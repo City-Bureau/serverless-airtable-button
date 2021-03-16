@@ -5,9 +5,8 @@
   "version": "0.1.0",
   "author": "City Bureau",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "serverless-dotenv-plugin": "^2.3.2",
-    "serverless-plugin-aws-alerts": "^1.4.0"
+    "@sentry/node": "^6.2.2",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",

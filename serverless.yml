@@ -1,4 +1,5 @@
 service: airtable-button
+useDotenv: true
 
 provider:
   name: aws
@@ -6,36 +7,21 @@ provider:
   stage: prod
   region: us-east-2
   environment:
-    AIRTABLE_KEY: ${env:AIRTABLE_KEY}
-    AIRTABLE_BASE: ${env:AIRTABLE_BASE}
-    AIRTABLE_TABLE: ${env:AIRTABLE_TABLE}
-    SNS_EMAIL: ${env:SNS_EMAIL}
+    AIRTABLE_KEY: ${ssm:/${self:provider.stage}/${self:service}/airtable/key~true}
+    AIRTABLE_BASE: ${ssm:/${self:provider.stage}/${self:service}/airtable/base~true}
+    AIRTABLE_TABLE: ${ssm:/${self:provider.stage}/${self:service}/airtable/table~true}
+    SENTRY_DSN: ${ssm:/${self:provider.stage}/${self:service}/sentry/dsn~true}
+  stackTags:
+    project: airtable-button
+    environment: prod
   tags:
-    project: airtable-button-prod
-
-plugins:
-  - serverless-dotenv-plugin
-  - serverless-plugin-aws-alerts
-
-custom:
-  alerts:
-    stages:
-      - prod
-    alarms:
-      - functionErrors
-    topics:
-      alarm:
-        topic: ${self:service}-${self:provider.stage}-alerts-alarm
-        notifications:
-          - protocol: email
-            endpoint: ${env:SNS_EMAIL}
+    project: airtable-button
+    environment: prod
 
 functions:
   handle:
     handler: handler.handler
     timeout: 30
-    alarms:
-      - functionErrors
     events:
       - http:
           path: api

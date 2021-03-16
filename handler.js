@@ -1,4 +1,10 @@
 require("isomorphic-fetch")
+const Sentry = require("@sentry/serverless")
+
+Sentry.AWSLambda.init({
+  dsn: process.env.SENTRY_DSN,
+  tracesSampleRate: 1.0,
+})
 
 // Allow for specifying array values in query parameters with [] syntax
 const parseGetParam = param => {
@@ -8,7 +14,7 @@ const parseGetParam = param => {
   return param
 }
 
-exports.handler = async event => {
+exports.handler = Sentry.AWSLambda.wrapHandler(async event => {
   console.log(JSON.stringify(event))
 
   let params = {}
@@ -63,4 +69,4 @@ exports.handler = async event => {
         headers,
       }
     })
-}
+})
